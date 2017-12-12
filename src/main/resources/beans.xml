@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="stateReader" class="ru.sbt.mipt.oop.JsonStateReader" />
+
+    <bean id="smartHome" class="ru.sbt.mipt.oop.SmartHome"  factory-method="read" factory-bean="stateReader">
+        <constructor-arg type="java.lang.String" value="smart-home-1.js"/>
+    </bean>
+
+    <bean id="writer" class="ru.sbt.mipt.oop.JsonStateWriter"/>
+
+
+    <bean id="lightHandler" class="ru.sbt.mipt.oop.LightEventHandler"
+          c:_0-ref="smartHome"/>
+
+    <bean id="doorHandler" class="ru.sbt.mipt.oop.DoorEventHandler"
+          c:_0-ref="smartHome"/>
+
+    <bean id="observer" class="ru.sbt.mipt.oop.EventObserver">
+        <constructor-arg>
+            <list>
+                <ref bean="doorHandler"/>
+                <ref bean="lightHandler"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>

@@ -16,4 +16,12 @@ public class SensorCommand {
                 ", objectId='" + objectId + '\'' +
                 '}';
     }
+
+    public CommandType getType() {
+        return type;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
 }
