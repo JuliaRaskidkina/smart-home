@@ -28,6 +28,7 @@ public class Room implements Actionable {
 
     @Override
     public void executeAction(Action action, Object parent) {
+
         for (Light light : lights) {
             light.executeAction(action, this);
         }
@@ -35,6 +36,7 @@ public class Room implements Actionable {
         for (Door door : doors) {
             door.executeAction(action, this);
         }
+        action.execute(this, parent);
     }
 
 }

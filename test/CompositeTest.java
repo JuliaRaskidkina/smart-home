@@ -2,37 +2,48 @@ import org.junit.Test;
 import ru.sbt.mipt.oop.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class CompositeTest {
-    private final String lightId = "1";
+
     @Test
     public void TestComposite() throws IOException {
         SmartHome home = new JsonStateReader().read("smart-home-1.js");
-
+        List<Room> rooms = new ArrayList<>();
+        List<Light> lights = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<SmartHome> homes = new ArrayList<>();
         home.executeAction(new Action() {
             @Override
             public void execute(Object object, Object parent) {
-                if(object instanceof Light && parent instanceof Room) {
-                    Light light = (Light) object;
-
-                    if(light.getId().equals(lightId)) {
-                        light.setOn(true);
-                    }
+                if (object instanceof  Room) {
+                    rooms.add((Room) object);
+                } else if(object instanceof Light) {
+                    lights.add((Light) object);
+                } else if(object instanceof Door) {
+                    doors.add((Door) object);
+                } else {
+                    homes.add((SmartHome) object);
                 }
             }
         }, this);
 
-        Light light = null;
+        int roomCount = 0;
+        int lightCount = 0;
+        int doorCount = 0;
+
         for (Room room : home.getRooms()) {
-            for (Light light1 : room.getLights()) {
-                if (light1.getId().equals(lightId)) {
-                    light = light1;
-                }
-            }
+            lightCount += room.getLights().size();
+            doorCount += room.getDoors().size();
+            roomCount++;
         }
 
-        assertTrue(light.isOn());
+        assertEquals(rooms.size(), roomCount);
+        assertEquals(lights.size(), lightCount);
+        assertEquals(doors.size(), doorCount);
+        assertEquals(homes.size(), 1);
     }
 }

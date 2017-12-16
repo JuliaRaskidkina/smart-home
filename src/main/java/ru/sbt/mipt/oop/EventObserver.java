@@ -39,5 +39,12 @@ public class EventObserver {
         return new SensorEvent(sensorEventType, objectId);
     }
 
+    public void onSensorEvent(SensorEvent event) {
+        System.out.println("Got event: " + event.getType());
+        for (EventHandler handler: handlers) {
+            handler.handle(event);
+        }
+    }
+
 
 }
